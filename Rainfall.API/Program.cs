@@ -1,4 +1,9 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Rainfall.Common.Logger;
+using Rainfall.Common.Middleware;
+using Rainfall.Service.Implementation.Rainfall;
+using Rainfall.Service.Interface.Rainfall;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +34,15 @@ builder.Services.AddSwaggerGen(setup =>
     });
 });
 
+// register service layer
+builder.Services.AddScoped<IRainfallService, RainfallService>();
+
+// register logger
+builder.Logging.AddProvider(new FileLoggerProvider(builder.Environment.ContentRootPath));
+
+// register middleware
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +55,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//app.UseResponseCompression();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 

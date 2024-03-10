@@ -1,6 +1,6 @@
-namespace Rainfall.UnitTest
+namespace Rainfall.UnitTest.Controller.Rainfall
 {
-    public class UnitTest1
+    public class GetReadings
     {
         [Fact]
         public void Test1()

@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Rainfall.Common\Rainfall.Common.csproj" />
-    <ProjectReference Include="..\Rainfall.Model\Rainfall.Model.csproj" />
-  </ItemGroup>
-
 </Project>

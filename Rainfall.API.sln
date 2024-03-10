@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.Service", "Rainfal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.UnitTest", "Rainfall.UnitTest\Rainfall.UnitTest.csproj", "{90556712-7D34-4B1B-88CB-441A991A5BF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.Common", "Rainfall.Common\Rainfall.Common.csproj", "{54F40FB3-8596-498D-AC16-93805D89045A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.Model", "Rainfall.Model\Rainfall.Model.csproj", "{0B13E841-794D-4C42-BE3E-1690D852EADE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{90556712-7D34-4B1B-88CB-441A991A5BF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90556712-7D34-4B1B-88CB-441A991A5BF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90556712-7D34-4B1B-88CB-441A991A5BF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54F40FB3-8596-498D-AC16-93805D89045A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54F40FB3-8596-498D-AC16-93805D89045A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54F40FB3-8596-498D-AC16-93805D89045A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54F40FB3-8596-498D-AC16-93805D89045A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B13E841-794D-4C42-BE3E-1690D852EADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B13E841-794D-4C42-BE3E-1690D852EADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B13E841-794D-4C42-BE3E-1690D852EADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B13E841-794D-4C42-BE3E-1690D852EADE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

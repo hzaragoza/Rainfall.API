@@ -10,4 +10,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Rainfall.Model\Rainfall.Model.csproj" />
+    <ProjectReference Include="..\Rainfall.Service\Rainfall.Service.csproj" />
+  </ItemGroup>
+
 </Project>
