@@ -5,6 +5,6 @@ Accept: application/json
 
 ###
 
-GET {{Rainfall.API_HostAddress}}/api/rainfall/id/1/readings?count=101
+GET {{Rainfall.API_HostAddress}}/api/rainfall/id/1/readings?count=100
 Accept: application/json
 ###

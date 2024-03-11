@@ -29,7 +29,7 @@ builder.Services.AddSwaggerGen(setup =>
 
     setup.AddServer(new OpenApiServer()
     {
-        Url = "http://localhost:3000",
+        Url = "https://localhost:7203",
         Description = "Rainfall Api"
     });
 });

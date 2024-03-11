@@ -1,6 +1,4 @@
 ﻿using Rainfall.Common.CustomException;
-using Rainfall.Common.Model.Validation;
-using Rainfall.Common.Validation.Interface;
 using Rainfall.Model.Rainfall;
 using Rainfall.Service.Implementation.Rainfall.Validation;
 using Rainfall.Service.Interface.Rainfall;
@@ -18,14 +16,28 @@ namespace Rainfall.Service.Implementation.Rainfall
         public async Task<bool> GetReadings(GetReadingsParam param)
         {
             #region validation
-            IsSatisfiedByResult validationResult = new GetReadingSpecification().IsSatisfiedBy(param);
-            if (!validationResult.success)
+            var stationIdSpec = new StationIdSpecification();
+            bool isStationSpecSatidfied = stationIdSpec.IsSatisfiedBy(param);
+            if (!isStationSpecSatidfied)
             {
                 throw new ResponseCustomException(
                     new ResponseCustomException.ResponseCustomParam()
                     {
                         httpStatusCode = System.Net.HttpStatusCode.BadRequest,
-                        strMessage = validationResult.message,
+                        strMessage = "Please provide stationId.",
+                        ysnCreateLog = true
+                    });
+            }
+
+            var countSpec = new StationIdSpecification();
+            bool isCountSpecSatidfied = countSpec.IsSatisfiedBy(param);
+            if (!isCountSpecSatidfied)
+            {
+                throw new ResponseCustomException(
+                    new ResponseCustomException.ResponseCustomParam()
+                    {
+                        httpStatusCode = System.Net.HttpStatusCode.BadRequest,
+                        strMessage = "Provided count is not in range.",
                         ysnCreateLog = true
                     });
             }
