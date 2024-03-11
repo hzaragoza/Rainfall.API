@@ -29,7 +29,7 @@ namespace Rainfall.Service.Implementation.Rainfall
                     });
             }
 
-            var countSpec = new StationIdSpecification();
+            var countSpec = new CountSpecification();
             bool isCountSpecSatidfied = countSpec.IsSatisfiedBy(param);
             if (!isCountSpecSatidfied)
             {

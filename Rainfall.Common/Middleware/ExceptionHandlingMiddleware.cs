@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Rainfall.Common.CustomException;
+using Rainfall.Common.Model.Logger;
 using Rainfall.Common.Model.Middleware.ExceptionHandling;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,14 @@ namespace Rainfall.Common.Middleware
                 ExceptionDetails exceptionDetail = this.GetExceptionDetails(ex);
                 if (exceptionDetail.ysnCreateLog)
                 {
-                    _logger.Log(LogLevel.Critical, exceptionDetail.strMessage);
+                    var log = new ApiLog()
+                    {
+                        strTransactionId = strTransactionID,
+                        strEndpoint = this.GetEndpoint(context),
+                        strMessage = exceptionDetail.strMessage
+                    };
+
+                    _logger.Log(LogLevel.Critical, $"{JsonConvert.SerializeObject(log)},");
                 }
 
                 await this.ReturnResponse(
@@ -91,6 +99,18 @@ namespace Rainfall.Common.Middleware
             param.context.Response.ContentType = "application/json";
 
             return param.context.Response.WriteAsync(errorMessage);
+        }
+        private string GetEndpoint(HttpContext context)
+        {
+            var request = context.Request;
+
+            var requestPath = request.Path.HasValue ? context.Request.Path.Value : null;
+            var queryString = request.QueryString.HasValue ? request.QueryString.Value : null;
+
+            string domain = $"{request.Scheme}://{request.Host.Value}";
+
+            string strEndpoint = domain + requestPath + queryString;
+            return strEndpoint;
         }
         #endregion
     }
