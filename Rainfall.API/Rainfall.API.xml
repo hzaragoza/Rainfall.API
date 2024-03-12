@@ -4,13 +4,11 @@
         <name>Rainfall.API</name>
     </assembly>
     <members>
-        <member name="M:Rainfall.API.Controllers.RainfallController.GetReadings(System.String,System.Int32)">
+        <member name="M:Rainfall.API.Controllers.RainfallController.#ctor(Rainfall.Service.Interface.Rainfall.IRainfallService)">
             <summary>
-            Get rainfall readings by station Id
+            Operations relating to rainfall
             </summary>
-            <param name="stationId"></param>
-            <param name="count"></param>
-            <returns></returns>
+            <param name="rainfallService"></param>
         </member>
     </members>
 </doc>

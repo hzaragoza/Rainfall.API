@@ -30,6 +30,8 @@ builder.Services.AddSwaggerGen(setup =>
         }
     });
 
+    setup.EnableAnnotations();
+
     setup.IncludeXmlComments($"{System.AppDomain.CurrentDomain.BaseDirectory}Rainfall.API.xml");
 
     setup.AddServer(new OpenApiServer()
