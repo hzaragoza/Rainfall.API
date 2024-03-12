@@ -9,6 +9,6 @@ namespace Rainfall.Service.Interface.Rainfall
 {
     public interface IRainfallService
     {
-        Task<bool> GetReadings(GetReadingsParam param);
+        Task<StationReadingResult> GetReadings(GetReadingsParam param);
     }
 }

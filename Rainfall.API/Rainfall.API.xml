@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Rainfall.API</name>
+    </assembly>
+    <members>
+        <member name="M:Rainfall.API.Controllers.RainfallController.GetReadings(System.String,System.Int32)">
+            <summary>
+            Get rainfall readings by station Id
+            </summary>
+            <param name="stationId"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

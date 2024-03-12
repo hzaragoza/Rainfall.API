@@ -3,9 +3,10 @@ using Newtonsoft.Json.Linq;
 using Rainfall.Common.CustomException;
 using Rainfall.Model.Rainfall;
 using Rainfall.Service.Implementation.Rainfall.Validation;
+using System.Net.Http;
 using Xunit.Abstractions;
 
-namespace Rainfall.UnitTest.Controller.Rainfall
+namespace Rainfall.UnitTest.Controller.Rainfall.Validation
 {
     public class ReadingTest_IsFieldsValid_Should
     {

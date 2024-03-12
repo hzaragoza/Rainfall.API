@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>.\Rainfall.API.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +15,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Rainfall.Model\Rainfall.Model.csproj" />
     <ProjectReference Include="..\Rainfall.Service\Rainfall.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Rainfall.API.xml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

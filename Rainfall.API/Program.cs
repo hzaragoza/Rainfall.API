@@ -4,6 +4,8 @@ using Rainfall.Common.Logger;
 using Rainfall.Common.Middleware;
 using Rainfall.Service.Implementation.Rainfall;
 using Rainfall.Service.Interface.Rainfall;
+using System.Net.Http.Headers;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 // builder.Services.AddSwaggerGen();
+var ServerSection = builder.Configuration.GetSection("Server");
 builder.Services.AddSwaggerGen(setup =>
 {
     setup.SwaggerDoc("v1", new OpenApiInfo()
@@ -27,11 +30,19 @@ builder.Services.AddSwaggerGen(setup =>
         }
     });
 
+    setup.IncludeXmlComments($"{System.AppDomain.CurrentDomain.BaseDirectory}Rainfall.API.xml");
+
     setup.AddServer(new OpenApiServer()
     {
-        Url = "https://localhost:7203",
+        Url = $"https://localhost:{ServerSection.GetSection("Port").Get<string>()}",
         Description = "Rainfall Api"
     });
+
+    //setup.AddServer(new OpenApiServer()
+    //{
+    //    Url = "https://localhost:3000",
+    //    Description = "Rainfall Api"
+    //});
 });
 
 // register service layer
@@ -42,6 +53,14 @@ builder.Logging.AddProvider(new FileLoggerProvider(builder.Environment.ContentRo
 
 // register middleware
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
+// register httpClient Factory
+builder.Services.AddHttpClient("httpclient-rainfall", client =>
+{
+    client.BaseAddress = new Uri("https://environment.data.gov.uk");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
 
 var app = builder.Build();
 
