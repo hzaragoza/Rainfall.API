@@ -1,4 +1,5 @@
 ﻿using Rainfall.Model.Rainfall;
+using Rainfall.Model.Rainfall.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Rainfall.Service.Interface.Rainfall
 {
     public interface IRainfallService
     {
-        Task<StationReadingResult> GetReadings(GetReadingsParam param);
+        Task<rainfallReadingResponse> GetReadings(GetReadingsParam param);
     }
 }

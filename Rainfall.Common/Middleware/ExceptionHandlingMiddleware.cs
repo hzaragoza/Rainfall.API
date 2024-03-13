@@ -5,8 +5,10 @@ using Newtonsoft.Json;
 using Rainfall.Common.CustomException;
 using Rainfall.Common.Model.Logger;
 using Rainfall.Common.Model.Middleware.ExceptionHandling;
+using Rainfall.Common.Model.Response;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -25,22 +27,22 @@ namespace Rainfall.Common.Middleware
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            string strTransactionID = Guid.NewGuid().ToString();
-
             try
             {
                 await next(context);
             }
             catch (Exception ex) 
-            { 
+            {
+                string? traceId = Activity.Current?.Id ?? context.TraceIdentifier;
+
                 ExceptionDetails exceptionDetail = this.GetExceptionDetails(ex);
                 if (exceptionDetail.ysnCreateLog)
                 {
                     var log = new ApiLog()
                     {
-                        strTransactionId = strTransactionID,
+                        strTransactionId = traceId,
                         strEndpoint = this.GetEndpoint(context),
-                        strMessage = exceptionDetail.strMessage
+                        strMessage = exceptionDetail.error.message
                     };
 
                     _logger.Log(LogLevel.Critical, $"{JsonConvert.SerializeObject(log)},");
@@ -49,8 +51,8 @@ namespace Rainfall.Common.Middleware
                 await this.ReturnResponse(
                     new ReturnResponseParam()
                     { 
-                        strTransactionID = strTransactionID,
-                        strMessage = exceptionDetail.strMessage,
+                        strTransactionID = traceId,
+                        error = exceptionDetail.error,
                         context = context,
                         ResponseStatusCode = exceptionDetail.ResponseStatusCode
                     });
@@ -71,13 +73,16 @@ namespace Rainfall.Common.Middleware
                     var customEx = ex as ResponseCustomException;
 
                     result.ysnCreateLog = customEx.ysnCreateLog;
-                    result.strMessage = customEx.strMessage;
+                    result.error = customEx.error;
                     result.ResponseStatusCode = customEx.httpStatusCode;
                     break;
 
                 case Exception:
                     result.ysnCreateLog = true;
-                    result.strMessage = ex.Message;
+                    result.error = new Model.Response.error()
+                    { 
+                        message = ex.Message
+                    };
                     result.strExceptionMessage = ex.InnerException?.Message;
                     result.ResponseStatusCode = HttpStatusCode.InternalServerError;
                     break;
@@ -89,11 +94,7 @@ namespace Rainfall.Common.Middleware
         {
             var errorMessage =
                     JsonConvert.SerializeObject(
-                        new ErrorResponse()
-                        {
-                            transactionId = param.strTransactionID,
-                            message = param.strMessage
-                        });
+                        param.error);
 
             param.context.Response.StatusCode = (int)param.ResponseStatusCode;
             param.context.Response.ContentType = "application/json";

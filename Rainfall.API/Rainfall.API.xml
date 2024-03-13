@@ -4,11 +4,5 @@
         <name>Rainfall.API</name>
     </assembly>
     <members>
-        <member name="M:Rainfall.API.Controllers.RainfallController.#ctor(Rainfall.Service.Interface.Rainfall.IRainfallService)">
-            <summary>
-            Operations relating to rainfall
-            </summary>
-            <param name="rainfallService"></param>
-        </member>
     </members>
 </doc>
