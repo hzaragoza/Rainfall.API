@@ -21,8 +21,8 @@
     },
     "Prod Environment": {
       "commandName": "Project",
-      "dotnetRunMessages": false,
-      "launchBrowser": false,
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:3000;http://localhost:3000",
       "environmentVariables": {

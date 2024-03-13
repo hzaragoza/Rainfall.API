@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Polly" Version="8.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Rainfall.Common\Rainfall.Common.csproj" />
     <ProjectReference Include="..\Rainfall.Model\Rainfall.Model.csproj" />
   </ItemGroup>

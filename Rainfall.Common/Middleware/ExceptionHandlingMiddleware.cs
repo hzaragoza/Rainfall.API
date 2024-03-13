@@ -35,7 +35,7 @@ namespace Rainfall.Common.Middleware
             {
                 string? traceId = Activity.Current?.Id ?? context.TraceIdentifier;
 
-                ExceptionDetails exceptionDetail = this.GetExceptionDetails(ex);
+                ExceptionDetails exceptionDetail = this.GetExceptionDetails(traceId, ex);
                 if (exceptionDetail.ysnCreateLog)
                 {
                     var log = new ApiLog()
@@ -51,7 +51,6 @@ namespace Rainfall.Common.Middleware
                 await this.ReturnResponse(
                     new ReturnResponseParam()
                     { 
-                        strTransactionID = traceId,
                         error = exceptionDetail.error,
                         context = context,
                         ResponseStatusCode = exceptionDetail.ResponseStatusCode
@@ -63,7 +62,7 @@ namespace Rainfall.Common.Middleware
 
 
         #region private
-        private ExceptionDetails GetExceptionDetails(Exception ex)
+        private ExceptionDetails GetExceptionDetails(string traceId, Exception ex)
         {
             var result = new ExceptionDetails();
 
@@ -81,7 +80,7 @@ namespace Rainfall.Common.Middleware
                     result.ysnCreateLog = true;
                     result.error = new Model.Response.error()
                     { 
-                        message = ex.Message
+                        message = $"TraceId:{traceId}. {ex.Message}"
                     };
                     result.strExceptionMessage = ex.InnerException?.Message;
                     result.ResponseStatusCode = HttpStatusCode.InternalServerError;
