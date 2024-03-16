@@ -5,13 +5,15 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainfall.API", "Rainfall.API\Rainfall.API.csproj", "{7E6C5F7D-27BC-4312-A1C2-012DAF0B0113}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.Service", "Rainfall.Service\Rainfall.Service.csproj", "{1463055A-610A-4376-A488-DB237BFCAEBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainfall.Service", "Rainfall.Service\Rainfall.Service.csproj", "{1463055A-610A-4376-A488-DB237BFCAEBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.UnitTest", "Rainfall.UnitTest\Rainfall.UnitTest.csproj", "{90556712-7D34-4B1B-88CB-441A991A5BF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainfall.UnitTest", "Rainfall.UnitTest\Rainfall.UnitTest.csproj", "{90556712-7D34-4B1B-88CB-441A991A5BF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.Common", "Rainfall.Common\Rainfall.Common.csproj", "{54F40FB3-8596-498D-AC16-93805D89045A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainfall.Common", "Rainfall.Common\Rainfall.Common.csproj", "{54F40FB3-8596-498D-AC16-93805D89045A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.Model", "Rainfall.Model\Rainfall.Model.csproj", "{0B13E841-794D-4C42-BE3E-1690D852EADE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rainfall.Model", "Rainfall.Model\Rainfall.Model.csproj", "{0B13E841-794D-4C42-BE3E-1690D852EADE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.Repository", "Rainfall.Repository\Rainfall.Repository.csproj", "{7B01877B-3748-443C-A73E-A79A42A2640C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{0B13E841-794D-4C42-BE3E-1690D852EADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B13E841-794D-4C42-BE3E-1690D852EADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B13E841-794D-4C42-BE3E-1690D852EADE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B01877B-3748-443C-A73E-A79A42A2640C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B01877B-3748-443C-A73E-A79A42A2640C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B01877B-3748-443C-A73E-A79A42A2640C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B01877B-3748-443C-A73E-A79A42A2640C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

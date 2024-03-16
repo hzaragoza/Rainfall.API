@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Rainfall.Common.Logger;
 using Rainfall.Common.Middleware;
+using Rainfall.Repository.Implementation;
+using Rainfall.Repository.Interface;
 using Rainfall.Service.Implementation.Rainfall;
 using Rainfall.Service.Interface.Rainfall;
 using System.Net.Http.Headers;
@@ -49,6 +51,9 @@ builder.Services.AddSwaggerGen(setup =>
 
 // register service layer
 builder.Services.AddScoped<IRainfallService, RainfallService>();
+
+// register repository layer
+builder.Services.AddScoped<IRainfallRepository, RainfallRepository>();
 
 // register logger
 builder.Logging.AddProvider(new FileLoggerProvider(builder.Environment.ContentRootPath));

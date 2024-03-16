@@ -7,13 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Polly" Version="8.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Rainfall.Common\Rainfall.Common.csproj" />
     <ProjectReference Include="..\Rainfall.Model\Rainfall.Model.csproj" />
-    <ProjectReference Include="..\Rainfall.Repository\Rainfall.Repository.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@ using Rainfall.Common.Extensions;
 using Rainfall.Common.Model.Logger;
 using Rainfall.Model.Rainfall;
 using Rainfall.Model.Rainfall.Response;
+using Rainfall.Repository.Interface;
 using Rainfall.Service.Implementation.Rainfall.Validation;
 using Rainfall.Service.Interface.Rainfall;
 using System;
@@ -22,14 +23,13 @@ namespace Rainfall.Service.Implementation.Rainfall
 {
     public class RainfallService : IRainfallService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<RainfallService> _logger;
-        private const int intRetryCount = 2;
+        private readonly IRainfallRepository _iRainfallRepository;
 
-        public RainfallService(IHttpClientFactory httpClientFactory, ILogger<RainfallService> logger) 
+        public RainfallService(ILogger<RainfallService> logger, IRainfallRepository iRainfallRepository) 
         {
-            _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _iRainfallRepository = iRainfallRepository;
         }
 
         public async Task<rainfallReadingResponse> GetReadings(GetReadingsParam param)
@@ -38,13 +38,12 @@ namespace Rainfall.Service.Implementation.Rainfall
             this.ReadingsValidation(param);
             #endregion
 
-            var rainfallResponse = await this.httpClientGet($"/flood-monitoring/id/stations/{param.stationId}/readings?_sorted&_limit={param.count}");
-            string jsonDeliveryStatusResponse = await rainfallResponse.Content.ReadAsStringAsync();
-            if (rainfallResponse.IsSuccessStatusCode)
+            var rainfallResponse = await _iRainfallRepository.GetReadings(param);
+            if (rainfallResponse != null)
             {
-                var result = JsonConvert.DeserializeObject<rainfallReadingResponse>(jsonDeliveryStatusResponse);
-                if (result != null)
+                if (rainfallResponse.success)
                 {
+                    var result = JsonConvert.DeserializeObject<rainfallReadingResponse>(rainfallResponse.json);
                     if (!result.readings.HasRecord())
                     {
                         throw new ResponseCustomException(
@@ -117,63 +116,6 @@ namespace Rainfall.Service.Implementation.Rainfall
                         ysnCreateLog = true
                     });
             }
-        }
-        private async Task<HttpResponseMessage> httpClientGet(string strEndpoint)
-        {
-            var client = _httpClientFactory.CreateClient("httpclient-rainfall");
-
-            #region Create Policy
-            var policy =
-                Policy.Handle<Exception>()
-                      .OrResult<HttpResponseMessage>(r =>
-                      {
-                          const bool proceedToRetry = true;
-                          const bool doNotRetry = false;
-
-                          if (!r.IsSuccessStatusCode)
-                          {
-                              if (r.StatusCode == HttpStatusCode.TooManyRequests)
-                              {
-                                  return proceedToRetry;
-                              }
-                          }
-
-                          return doNotRetry;
-                      })
-                      .WaitAndRetryAsync(
-                            intRetryCount,
-                            attempt => TimeSpan.FromSeconds(5),
-                            (ex, _, retryCount, ctx) =>
-                            {
-                                #region Get Error message and Status Code
-                                string strErrorMessage = (ex != null && ex.Exception != null)
-                                                              ? $" Error message: {ex.Exception.Message}"
-                                                              : System.String.Empty;
-                                string strInnerErrorMessage = (ex != null && ex.Exception != null && ex.Exception.InnerException != null)
-                                                                  ? $" Inner Exception message: {ex.Exception.InnerException.Message}"
-                                                                  : System.String.Empty;
-
-                                string strStatusCodeInfo = (ex != null && ex.Result != null)
-                                                                ? $" Status Code: ({(int)ex.Result.StatusCode}){ex.Result.StatusCode.ToString()}."
-                                                                : System.String.Empty;
-                                #endregion
-
-                                #region Get Payload and Response
-                                var response = ex?.Result?.Content?.ReadAsStringAsync().Result;
-                                #endregion
-
-                                #region Create Log
-                                _logger.Log(
-                                    LogLevel.Critical, 
-                                    $"{JsonConvert.SerializeObject(new ApiLog()
-                                            {
-                                                strMessage = $"Retry count: {retryCount}. Waited until 5sec before it execute attempt # {retryCount}.{strStatusCodeInfo}{strErrorMessage}{strInnerErrorMessage}"
-                                            })},");
-                                #endregion
-                            });
-            #endregion
-
-            return await policy.ExecuteAsync(() => client.GetAsync(strEndpoint));
         }
         #endregion
     }
