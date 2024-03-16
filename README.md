@@ -1,5 +1,7 @@
 # Rainfall.API
 
+clone using dev branch
+
 logging and returning correct http status code is being handled under the middleware
 ![image](https://github.com/hzaragoza/Rainfall.API/assets/20300192/838c77f9-9662-41a4-8218-7f54db498c14)
 
