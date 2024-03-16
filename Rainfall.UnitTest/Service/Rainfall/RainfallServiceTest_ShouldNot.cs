@@ -13,6 +13,7 @@ using Rainfall.Service.Interface.Rainfall;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,9 +25,170 @@ namespace Rainfall.UnitTest.Service.Rainfall
         private readonly Mock<IRainfallRepository> _repoMock = new Mock<IRainfallRepository>();
 
         [Fact]
+        public async Task GetReadings_EmptyStationId_ReturnsResponseCustomException()
+        {
+            #region arrange
+            var exceptionType = typeof(ResponseCustomException);
+
+            var param = new GetReadingsParam()
+            {
+                stationId = string.Empty,
+                count = 3
+            };
+
+            _repoMock
+                .Setup(srvc => srvc.GetReadings(It.IsAny<GetReadingsParam>()))
+                .ReturnsAsync(new httpResponse());
+
+            var service = new RainfallService(_loggerMock.Object, _repoMock.Object);
+            #endregion
+
+            #region act
+            var ex = await Record.ExceptionAsync(async () =>
+            {
+                await service.GetReadings(param);
+            }) as ResponseCustomException;
+            #endregion
+
+            #region assert
+            Assert.NotNull(ex);
+            Assert.IsType(exceptionType, ex);
+            ex.error.Should().NotBeNull();
+            ex.error.detail.Should().NotBeNull();
+            ex.error.detail.Count.Should().Be(1);
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, ex.httpStatusCode);
+            Assert.Equal("Invalid request", ex.error.message);
+            Assert.Equal("station", ex.error.detail.FirstOrDefault().propertyName);
+            Assert.Equal("Please provide stationId.", ex.error.detail.FirstOrDefault().message);
+            #endregion
+        }
+
+        [Fact]
+        public async Task GetReadings_CountNotValidBelow1_ReturnsResponseCustomException()
+        {
+            #region arrange
+            var exceptionType = typeof(ResponseCustomException);
+
+            var param = new GetReadingsParam()
+            {
+                stationId = "3680",
+                count = 0
+            };
+
+            _repoMock
+                .Setup(srvc => srvc.GetReadings(It.IsAny<GetReadingsParam>()))
+                .ReturnsAsync(new httpResponse());
+
+            var service = new RainfallService(_loggerMock.Object, _repoMock.Object);
+            #endregion
+
+            #region act
+            var ex = await Record.ExceptionAsync(async () =>
+            {
+                await service.GetReadings(param);
+            }) as ResponseCustomException;
+            #endregion
+
+            #region assert
+            Assert.NotNull(ex);
+            Assert.IsType(exceptionType, ex);
+            ex.error.Should().NotBeNull();
+            ex.error.detail.Should().NotBeNull();
+            ex.error.detail.Count.Should().Be(1);
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, ex.httpStatusCode);
+            Assert.Equal("Invalid request", ex.error.message);
+            Assert.Equal("count", ex.error.detail.FirstOrDefault().propertyName);
+            Assert.Equal("Provided count is not in range.", ex.error.detail.FirstOrDefault().message);
+            #endregion
+        }
+
+        [Fact]
+        public async Task GetReadings_CountNotValidAbove100_ReturnsResponseCustomException()
+        {
+            #region arrange
+            var exceptionType = typeof(ResponseCustomException);
+
+            var param = new GetReadingsParam()
+            {
+                stationId = "3680",
+                count = 101
+            };
+
+            _repoMock
+                .Setup(srvc => srvc.GetReadings(It.IsAny<GetReadingsParam>()))
+                .ReturnsAsync(new httpResponse());
+
+            var service = new RainfallService(_loggerMock.Object, _repoMock.Object);
+            #endregion
+
+            #region act
+            var ex = await Record.ExceptionAsync(async () =>
+            {
+                await service.GetReadings(param);
+            }) as ResponseCustomException;
+            #endregion
+
+            #region assert
+            Assert.NotNull(ex);
+            Assert.IsType(exceptionType, ex);
+            ex.error.Should().NotBeNull();
+            ex.error.detail.Should().NotBeNull();
+            ex.error.detail.Count.Should().Be(1);
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, ex.httpStatusCode);
+            Assert.Equal("Invalid request", ex.error.message);
+            Assert.Equal("count", ex.error.detail.FirstOrDefault().propertyName);
+            Assert.Equal("Provided count is not in range.", ex.error.detail.FirstOrDefault().message);
+            #endregion
+        }
+
+        [Fact]
+        public async Task GetReadings_InvalidCountStationId_ReturnsResponseCustomException()
+        {
+            #region arrange
+            var exceptionType = typeof(ResponseCustomException);
+
+            var param = new GetReadingsParam()
+            {
+                stationId = String.Empty,
+                count = 105
+            };
+
+            _repoMock
+                .Setup(srvc => srvc.GetReadings(It.IsAny<GetReadingsParam>()))
+                .ReturnsAsync(new httpResponse());
+
+            var service = new RainfallService(_loggerMock.Object, _repoMock.Object);
+            #endregion
+
+            #region act
+            var ex = await Record.ExceptionAsync(async () =>
+            {
+                await service.GetReadings(param);
+            }) as ResponseCustomException;
+            #endregion
+
+            #region assert
+            Assert.NotNull(ex);
+            Assert.IsType(exceptionType, ex);
+            ex.error.Should().NotBeNull();
+            ex.error.detail.Should().NotBeNull();
+            ex.error.detail.Count.Should().Be(2);
+            Assert.Equal(System.Net.HttpStatusCode.BadRequest, ex.httpStatusCode);
+            Assert.Equal("Invalid request", ex.error.message);
+
+            Assert.Equal("station", ex.error.detail[0].propertyName);
+            Assert.Equal("Please provide stationId.", ex.error.detail[0].message);
+            Assert.Equal("count", ex.error.detail[1].propertyName);
+            Assert.Equal("Provided count is not in range.", ex.error.detail[1].message);
+            #endregion
+        }
+
+        [Fact]
         public async Task GetReadings_NoRecordReturned_ReturnsResponseCustomException()
         {
             #region arrange
+            var exceptionType = typeof(ResponseCustomException);
+
             var param = new GetReadingsParam()
             {
                 stationId = "3680",
@@ -49,12 +211,12 @@ namespace Rainfall.UnitTest.Service.Rainfall
 
             #region assert
             Assert.NotNull(ex);
-            Assert.IsType(typeof(ResponseCustomException), ex);
+            Assert.IsType(exceptionType, ex);
             ex.error.Should().NotBeNull();
             ex.error.detail.Should().NotBeNull();
-            Assert.Equal(ex.httpStatusCode, System.Net.HttpStatusCode.NotFound);
-            Assert.Equal(ex.error.message, "No readings found for the specified stationId");
-            Assert.Equal(ex.error.detail.Count, 0);
+            ex.error.detail.Count.Should().Be(0);
+            Assert.Equal(System.Net.HttpStatusCode.NotFound, ex.httpStatusCode);
+            Assert.Equal("No readings found for the specified stationId", ex.error.message);
             #endregion
         }
 
@@ -62,6 +224,8 @@ namespace Rainfall.UnitTest.Service.Rainfall
         public async Task GetReadings_FailedRequest_ReturnsResponseCustomException()
         {
             #region arrange
+            var exceptionType = typeof(ResponseCustomException);
+
             var param = new GetReadingsParam()
             {
                 stationId = "3680",
@@ -84,12 +248,12 @@ namespace Rainfall.UnitTest.Service.Rainfall
 
             #region assert
             Assert.NotNull(ex);
-            Assert.IsType(typeof(ResponseCustomException), ex);
+            Assert.IsType(exceptionType, ex);
             ex.error.Should().NotBeNull();
             ex.error.detail.Should().NotBeNull();
-            Assert.Equal(ex.httpStatusCode, System.Net.HttpStatusCode.InternalServerError);
-            Assert.Equal(ex.error.message, "Something went wrong");
-            Assert.Equal(ex.error.detail.Count, 0);
+            ex.error.detail.Count.Should().Be(0);
+            Assert.Equal(System.Net.HttpStatusCode.InternalServerError, ex.httpStatusCode);
+            Assert.Equal("Something went wrong", ex.error.message);
             #endregion
         }
 
